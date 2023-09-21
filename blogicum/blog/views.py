@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import Http404
 
 posts = [
     {
@@ -57,9 +58,11 @@ def category_posts(request, category_slug):
 
 
 def post_detail(request, id):
-    context = {}
     template_name = 'blog/detail.html'
+    context = {}
     for post in posts:
         if post.get('id') == id:
             context = {'post': post}
+    if not context:
+        raise Http404('Старница не найдена')
     return render(request, template_name, context)
